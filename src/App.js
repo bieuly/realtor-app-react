@@ -4,6 +4,7 @@ import MainListings from './components/MainListings';
 import FavoriteListings from './components/FavoriteListings';
 import RealtyProvider from './providers/RealtyProvider';
 import Filter from './components/Filter';
+import { Loader } from 'semantic-ui-react'
 
 class App extends Component {
 
@@ -83,15 +84,19 @@ class App extends Component {
     const listingsToDisplay = this.filterListings();
     const favoritesToDisplay = this.getFavoriteListings();
 
-    return (
-      <div className="App">
-        <h1>Realtor App</h1>
-        <Filter updateFilter={this.updateFilter}/>
-        <MainListings listings={listingsToDisplay} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/>
-        <h1>Favorites</h1>
-        <FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/>
-      </div>
-    );
+    if(!this.state.realtyData.length){
+      return <Loader size="large" active>Fetching Data</Loader>
+    } else {
+      return (
+        <div className="App">
+          <h1>Realtor App</h1>
+          <Filter updateFilter={this.updateFilter}/>
+          <MainListings listings={listingsToDisplay} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/>
+          <h1>Favorites</h1>
+          <FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/>
+        </div>
+      );
+    }
   }
 }
 
