@@ -16,22 +16,29 @@ export default class Filter extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedFilterOption: "id",
+            filterOption: "id",
+            searchTerm: ""
         }
     }
 
     updateFilterOption = (selectedOption) => {
-        this.setState({selectedFilterOption: selectedOption})
+        this.setState({filterOption: selectedOption})
+        this.props.updateFilter(selectedOption, this.state.searchTerm);
+    }
+
+    updateFilterSearchTerm = (searchTerm) => {
+        this.setState({searchTerm: searchTerm})
+        this.props.updateFilter(this.state.filterOption, searchTerm);
     }
 
     render() {
         return (
         <div id="Filter">
             <Input
-            label={<Dropdown id="filterOption" defaultValue={this.state.selectedFilterOption} options={filterOptions} onChange={(e, {value}) => this.updateFilterOption(value)}/>}
+            label={<Dropdown id="filterOption" defaultValue={this.state.filterOption} options={filterOptions} onChange={(e, {value}) => this.updateFilterOption(value)}/>}
             labelPosition='left'
             placeholder='Filter'
-            onChange={(e, {value}) => this.props.updateFilter(this.state.selectedFilterOption, value)}
+            onChange={(e, {value}) => this.updateFilterSearchTerm(value)}
             />
         </div>
         )
