@@ -14,10 +14,6 @@ class App extends Component {
 
     this.state = {
       realtyData: [],
-      filter: {
-        option: "id",
-        searchTerm: ""
-      },
       favorites: new Set()
     }
 
@@ -28,29 +24,6 @@ class App extends Component {
     this.realtyProvider.getRealtyData().then(data=>{
       this.setState({realtyData: data})
     });
-  }
-
-  updateFilter = (option, searchTerm) => {
-    this.setState({
-      filter: {
-        option: option,
-        searchTerm: searchTerm
-      }
-    })
-  }
-
-  filterListings = () => {
-    let filterOption = this.state.filter.option;
-    let searchTerm = this.state.filter.searchTerm;
-
-    if(searchTerm == "") {
-      return this.state.realtyData
-    }
-    if(filterOption && searchTerm) {
-      return this.state.realtyData.filter((listing)=>{
-          return listing[filterOption].toString().includes(searchTerm)
-      });
-    }
   }
 
   toggleFavorites = (id) => {
@@ -81,7 +54,6 @@ class App extends Component {
   }
 
   render() {
-    const listingsToDisplay = this.filterListings();
     const favoritesToDisplay = this.getFavoriteListings();
 
     if(!this.state.realtyData.length){
@@ -90,8 +62,7 @@ class App extends Component {
       return (
         <div className="App">
           <h1>Realtor App</h1>
-          <Filter updateFilter={this.updateFilter}/>
-          <MainListings listings={listingsToDisplay} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/>
+          <MainListings listings={this.state.realtyData} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/>
           <h1>Favorites</h1>
           <FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/>
         </div>
