@@ -68,9 +68,6 @@ class App extends Component {
         <div className="App">
           <h1>Realtor App</h1>
           <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
-          {/* <MainListings listings={this.state.realtyData} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/> */}
-          {/* <h1>Favorites</h1> */}
-          {/* <FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/> */}
         </div>
       );
     }
