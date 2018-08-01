@@ -4,7 +4,7 @@ import MainListings from './components/MainListings';
 import FavoriteListings from './components/FavoriteListings';
 import RealtyProvider from './providers/RealtyProvider';
 import Filter from './components/Filter';
-import { Loader } from 'semantic-ui-react'
+import { Tab, Loader } from 'semantic-ui-react'
 
 class App extends Component {
 
@@ -56,15 +56,21 @@ class App extends Component {
   render() {
     const favoritesToDisplay = this.getFavoriteListings();
 
+    const panes = [
+        { menuItem: 'Listings',render: () => <Tab.Pane attached={false}><MainListings listings={this.state.realtyData} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/></Tab.Pane> },
+        { menuItem: 'Favorites', render: () => <Tab.Pane attached={false}><FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/></Tab.Pane> },
+      ]
+
     if(!this.state.realtyData.length){
       return <Loader size="large" active>Fetching Data</Loader>
     } else {
       return (
         <div className="App">
           <h1>Realtor App</h1>
-          <MainListings listings={this.state.realtyData} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/>
-          <h1>Favorites</h1>
-          <FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/>
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+          {/* <MainListings listings={this.state.realtyData} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/> */}
+          {/* <h1>Favorites</h1> */}
+          {/* <FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/> */}
         </div>
       );
     }
