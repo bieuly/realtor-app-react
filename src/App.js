@@ -122,7 +122,7 @@ class App extends Component {
             </Menu.Item>
           </Sidebar>  
 
-          <Sidebar.Pusher>
+          <Sidebar.Pusher dimmed={this.state.visible}>
           <h1>Realtor App</h1>
           <Filter updateFilter={this.updateFilter}/>
           <MainListings listings={listingsToDisplay} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/>
