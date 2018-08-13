@@ -1,4 +1,4 @@
-export const filterOptions = {
+const filterOptions = {
     id: "ID",
     price: "Price",
     bedrooms: "Bedrooms",
@@ -7,3 +7,5 @@ export const filterOptions = {
     type: "Type",
     year: "Year"
 }
+
+export default filterOptions;

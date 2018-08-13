@@ -1,7 +1,9 @@
-import * as favorites from './favorites'
-import * as filter from './filter'
+import * as favorites from './favoritesActions'
+import * as filter from './filterActions'
+import * as realtyData from './realtyDataActions'
 
 export default {
     favorites,
-    filter
+    filter,
+    realtyData
 }
