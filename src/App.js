@@ -5,65 +5,40 @@ import FavoriteListings from './components/FavoriteListings';
 import RealtyProvider from './providers/RealtyProvider';
 import Filter from './components/Filter';
 import { Tab, Loader } from 'semantic-ui-react'
+import { connect } from 'react-redux'
+import { realtyDataFetch } from './actions/realtyDataActions'
+import { toggleFavorite } from './actions/favoritesActions'
 
 class App extends Component {
 
-  constructor(props) {
-    
-    super(props)
-
-    this.state = {
-      realtyData: [],
-      favorites: new Set()
-    }
-
-    this.realtyProvider = new RealtyProvider();
-  }
-
   componentDidMount() {
-    this.realtyProvider.getRealtyData().then(data=>{
-      this.setState({realtyData: data})
-    });
+    const realtyProvider = new RealtyProvider();
+    this.props.fetch(realtyProvider)
   }
 
   toggleFavorites = (id) => {
-    if(!this.state.favorites.has(id)){
-      this.setState((prevState)=>{
-        prevState.favorites.add(id)
-        const newFavorites = new Set([...prevState.favorites])
-        return {
-          favorites: newFavorites
-        }
-      })
-    } else {
-      this.setState((prevState)=>{
-        prevState.favorites.delete(id)
-        const newFavorites = new Set([...prevState.favorites])
-        return {
-          favorites: newFavorites
-        }
-      })
+    if(!this.props.favorites.has(id)){
+      this.props.toggleFavorite(id)
     }
   }
 
   getFavoriteListings = () => {
-    const favorites =  this.state.realtyData.filter((listing)=>{
-        return this.state.favorites.has(listing.id)
+    const favorites = this.props.realtyData.filter((listing)=>{
+        return this.props.favorites.has(listing.id)
       })
     return favorites;
   }
 
   render() {
-    const favoritesToDisplay = this.getFavoriteListings();
 
     const panes = [
-        { menuItem: 'Listings',render: () => <Tab.Pane attached={false}><MainListings listings={this.state.realtyData} favorites={this.state.favorites} toggleFavorites={this.toggleFavorites}/></Tab.Pane> },
-        { menuItem: 'Favorites', render: () => <Tab.Pane attached={false}><FavoriteListings listings={favoritesToDisplay} toggleFavorites={this.toggleFavorites}/></Tab.Pane> },
+        { menuItem: 'Listings',render: () => <Tab.Pane attached={false}><MainListings listings={this.props.realtyData} favorites={this.props.favorites} toggleFavorites={this.toggleFavorites}/></Tab.Pane> },
+        { menuItem: 'Favorites', render: () => <Tab.Pane attached={false}><FavoriteListings listings={this.getFavoriteListings()} toggleFavorites={this.toggleFavorites}/></Tab.Pane> },
       ]
 
-    if(!this.state.realtyData.length){
+    if(this.props.isLoading || !this.props.realtyData.length){
       return <Loader size="large" active>Fetching Data</Loader>
-    } else {
+    } else if(this.props.realtyData.length) {
       return (
         <div className="App">
           <h1>Realtor App</h1>
@@ -74,4 +49,21 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetch: (provider) => dispatch(realtyDataFetch(provider)),
+    toggleFavorite: (id) => dispatch(toggleFavorite(id))
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    realtyData: state.realtyData,
+    isLoading: state.realtyDataIsLoading,
+    hasErrored: state.realtyDataHasErrored,
+    favorites: state.favorites,
+    filter: state.filter
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

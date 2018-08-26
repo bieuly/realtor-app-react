@@ -1,10 +1,12 @@
 import favorites from './favoritesReducer'
 import filter from './filterReducer'
-import realtyData from './realtyDataReducer'
+import {realtyData, realtyDataHasErrored, realtyDataIsLoading} from './realtyDataReducer'
 import { combineReducers } from 'redux'
 
 export default combineReducers({
-    favorites,
+    realtyDataIsLoading,
+    realtyDataHasErrored,
+    realtyData,
     filter,
-    realtyData
+    favorites
 })

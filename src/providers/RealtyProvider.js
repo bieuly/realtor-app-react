@@ -3,7 +3,9 @@ export default class RealtyProvider {
 
     async getRealtyData() {
         var response = await fetch(this.url);
+        if(!response.ok) {
+            throw Error(response.statusText);
+        }
         return await response.json();
     }
-
 }
